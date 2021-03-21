@@ -1,7 +1,7 @@
 const path = require("path");
-
 const express = require("express");
 const bodyParser = require("body-parser");
+const errorController = require("./controllers/error");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -16,8 +16,6 @@ const shopRoutes = require("./routes/shop");
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
-app.use((req, res) => {
-  res.status(404).render("page-not-found", { pageTitle: "Page Not Found" });
-});
+app.use(errorController.getPageNotFound);
 
 app.listen(3000);
