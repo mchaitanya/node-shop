@@ -2,13 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const rootDir = require("../utils/path");
 
+const filePath = path.join(rootDir, "data", "products.json");
+
 module.exports = class Product {
   constructor(title) {
     this.title = title;
   }
 
   save() {
-    const filePath = path.join(rootDir, "data", "products.json");
     // https://stackoverflow.com/a/34811359
     // make sure the folder exists, node won't create the parent folder for you
     fs.readFile(filePath, (err, fileContents) => {
@@ -24,8 +25,13 @@ module.exports = class Product {
     });
   }
 
-  static fetchAll() {
-    // do something here ...
-    return [];
+  static fetchAll(callback) {
+    fs.readFile(filePath, (err, fileContents) => {
+      if (err) {
+        callback([]);
+      } else {
+        callback(JSON.parse(fileContents));
+      }
+    });
   }
 };
